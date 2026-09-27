@@ -41,4 +41,36 @@ db.exec(`
     CREATE INDEX IF NOT EXISTS idx_linked_accounts_user ON linked_accounts(user_id);
 `);
 
+// === USERS ===
+
+const stmtCreateUser = db.prepare(
+  'INSERT INTO users (username, bio) VALUES (?, ?) RETURNING *'
+);
+
+export function createUser(username, bio = null) {
+  return stmtCreateUser.get(username, bio);
+}
+
+const stmtGetUserById = db.prepare('SELECT * FROM users WHERE id = ?');
+
+export function getUserById(id) {
+  return stmtGetUserById.get(id) ?? null;
+}
+
+const stmtGetUserByUsername = db.prepare(
+  'SELECT * FROM users WHERE username = ?'
+);
+ 
+export function getUserByUsername(username) {
+  return stmtGetUserByUsername.get(username) ?? null;
+}
+
+const stmtUpdateUserBio = db.prepare(
+  'UPDATE users SET bio = ? WHERE id = ? RETURNING *'
+);
+
+export function updateUserBio(id, bio) {
+  return stmtUpdateUserBio.get(bio, id) ?? null;
+}
+
 export default db;
