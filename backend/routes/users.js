@@ -1,8 +1,9 @@
 import express from 'express';
-import { createUserController } from '../controllers/usersController.js';
+import { createNewUser, changeBio } from '../controllers/usersController.js';
 
 const router = express.Router();
 
-router.post('/', createUserController);
+router.post('/', createNewUser);
+router.patch('/bio', changeBio);
 
 export default router;
